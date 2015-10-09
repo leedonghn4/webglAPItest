@@ -1,0 +1,152 @@
+<!-- int this version, we have the function: 
+(1)mini screen draw on the screen
+(2)zoom in and zoom out use pageup and pagedown keyboard function
+(3)mouse left button down draw a point in the 3D window
+(4)mouse middle button down select point and drag point the where the mouse move to
+(5)draw into texture use framebuffer
+(6)draw lines
+<script src="testOncoprint.js" type="text/javascript"></script>
+(7)a textured cube box in the scene 
+ -->
+<html lang="zh-CN">
+
+<head>
+<title>apitest</title>
+<meta charset="UTF-8" />
+<script type="text/javascript" src="Oak3D_v_0_5.js"></script>
+<script type="text/javascript" src="gl-matrix.js"></script>
+<script type="text/javascript" src="webgl-utils.js"></script>
+<script type="text/javascript" src="glMatrix-0.9.5.min.js"></script>
+<script type="text/javascript" src="GLU.js"></script>
+<script type="text/javascript" src="apitest.js"></script>
+</head>
+
+<script>
+
+	var makedata = function()
+	{
+		var datas;
+		var rectanglevertices = [];
+		var rectanglecolors = [];
+		var	bascisparameters = {
+		    		colNum:50,
+		    		rowNum:100,
+    			    marginX: 5.0,
+				    marginY: 5.0,
+				    recWidth: 7.0,
+				    recHeight: 20.0,
+				    squareHeigth: 7.0,
+				    depth: 0.01,
+				    mouseshiftX: 100,
+				    mouseshiftY: 50,
+				    scalepercentage: 0.185, //scale percentage
+				    incresortstatus: true,
+			        showmutation: false,
+			    	zoomValue: 1.0
+	    	};
+
+		for(var j = 0; j < bascisparameters.colNum; j++)
+		{
+
+		    var low  = ( bascisparameters.marginY+ bascisparameters.recHeight)*j +  bascisparameters.marginY;
+		    var high = ( bascisparameters.marginY+ bascisparameters.recHeight)*j +  bascisparameters.marginY +  bascisparameters.recHeight;      
+
+		    if(j === 47 )
+		    {
+		        for(var i = 0; i < bascisparameters.rowNum; i++)
+		        {
+		            var increment = i*1.0/ bascisparameters.rowNum ;
+		            var low  = ( bascisparameters.marginY+ bascisparameters.recHeight)*j +  bascisparameters.marginY;
+		            var high = ( bascisparameters.marginY+ bascisparameters.recHeight)*j +  bascisparameters.marginY +  bascisparameters.recHeight * increment;  
+
+		            var left  = ( bascisparameters.marginX+ bascisparameters.recWidth)*i +  bascisparameters.marginX;
+		            var right = ( bascisparameters.marginX+ bascisparameters.recWidth)*i +  bascisparameters.recWidth +  bascisparameters.marginX;
+
+		            rectanglevertices.push(right, high,  bascisparameters.depth);
+		            rectanglevertices.push(left,  high,  bascisparameters.depth);
+		            rectanglevertices.push(right,  low,  bascisparameters.depth);
+
+		            rectanglevertices.push(left, high,  bascisparameters.depth);
+		            rectanglevertices.push(right, low,  bascisparameters.depth);
+		            rectanglevertices.push(left,  low,  bascisparameters.depth);
+		        }
+		    }
+		    else
+		    {
+		        for(var i = 0; i < bascisparameters.rowNum; i++)
+		        {
+		                var left  = ( bascisparameters.marginX+ bascisparameters.recWidth)*i +  bascisparameters.marginX;
+		                var right = ( bascisparameters.marginX+ bascisparameters.recWidth)*i +  bascisparameters.recWidth +  bascisparameters.marginX;
+
+		                rectanglevertices.push(right, high,  bascisparameters.depth);
+		                rectanglevertices.push(left,  high,  bascisparameters.depth);
+		                rectanglevertices.push(right,  low,  bascisparameters.depth);
+
+		                rectanglevertices.push(left, high,  bascisparameters.depth);
+		                rectanglevertices.push(right, low,  bascisparameters.depth);
+		                rectanglevertices.push(left,  low,  bascisparameters.depth);
+		        }
+		    }
+		}
+
+        for(var i = 0; i < bascisparameters.rowNum; i++)
+        {           
+            for(var j = 0; j < bascisparameters.colNum; j++)
+            {
+                rectanglecolors.push(1.0, 1.0, 0.0, 1.0);
+                rectanglecolors.push(1.0, 1.0, 0.0, 1.0);
+                rectanglecolors.push(1.0, 1.0, 0.0, 1.0);
+
+                rectanglecolors.push(1.0, 1.0, 0.0, 1.0);
+                rectanglecolors.push(1.0, 1.0, 0.0, 1.0);
+                rectanglecolors.push(1.0, 1.0, 0.0, 1.0);
+            }
+        }
+
+        datas = {	
+        		vertexdata:rectanglevertices,
+        		colordata:rectanglecolors
+        	};
+
+        return datas;
+	}
+
+
+	var initialwebgl = function()
+	{
+		var datas = makedata();
+		var canvas = document.getElementById("glcanvas");
+		var init = new initialize(canvas);
+		var gl = init.glValue();
+		var wf = new webglFunction(gl);
+		wf.drawElements(datas);
+
+		//drawElements(canvas);
+	}
+</script>
+
+
+<body onload="initialwebgl()">
+    <div><canvas id="glcanvas" style="border: none; position: fixed; left: 150px; top: 20px;background-color:gray" width="1500" height="1300"></canvas></div><br/>
+	<div>xpos:<a id="xpos"></a> ypos:<a id="ypos"></a></div>
+	<div>posX:<a id="x"></a></div><div> posY:<a id="y"></a></div></br>
+	<div>pos1:<a id="x1"></a></div><div> pos2:<a id="y1"></a></div></br>
+	<div>pos3:<a id="x2"></a></div><div> pos4:<a id="y2"></a></div></br>
+	<div>mX:<a id="m1"></a></div><div> mY:<a id="m2"></a></div><div>mZ:<a id="m3"></a></div></br>
+	<div>Distance:<a id="dis"></a></div></br>
+	<div>IndexNum:<a id="IndNum"></a></div></br>
+	<div>Debug:<a id="debug"></a></div></br>
+	<div>mRIX:<a id="mriX"></a></div><div> mRIY:<a id="mriY"></a></div></br>
+	<div><button type="button" onClick="shrink()">shrink</button><div></br>
+	<div><button type="button" onClick="enlarge()">enlarge</button><div></br>
+	<div><button type="button" onClick="showhide()">show/hide</button><div></br>
+    <div><button type="button" onClick="removespace()">removespace</button><div></br>
+    <div><button type="button" onClick="withspace()">withspace</button><div></br>
+    <div><button type="button" onClick="addtrack()">addtrack</button><div></br>
+    <div><button type="button" onClick="deltrack()">deltrack</button><div></br>
+    <div><button type="button" onClick="incresort()">incresort</button><div></br>
+    <div><button type="button" onClick="decresort()">decresort</button><div></br>
+    <div><input type="range" style="width:80px"  min="0.0" max="1.0" value="1.0" step="0.1" onchange="zoom( value)"/></div></br>
+</body>
+
+</html>

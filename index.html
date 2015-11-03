@@ -13,12 +13,15 @@
 <head>
 <title>apitest</title>
 <meta charset="UTF-8" />
-<script type="text/javascript" src="webgl/Oak3D_v_0_5.js"></script>
-<script type="text/javascript" src="webgl/gl-matrix.js"></script>
-<script type="text/javascript" src="webgl/webgl-utils.js"></script>
-<script type="text/javascript" src="webgl/glMatrix-0.9.5.min.js"></script>
-<script type="text/javascript" src="webgl/GLU.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="Oak3D_v_0_5.js"></script>
+<script type="text/javascript" src="gl-matrix.js"></script>
+<script type="text/javascript" src="webgl-utils.js"></script>
+<script type="text/javascript" src="glMatrix-0.9.5.min.js"></script>
+<script type="text/javascript" src="GLU.js"></script>
 <script type="text/javascript" src="apitest.js"></script>
+<script type="text/javascript" src="library.js"></script>
+<script type="text/javascript" src="ruleset2.js"></script>
 </head>
 
 <script>
@@ -28,14 +31,23 @@
 		var datas;
 		var rectanglevertices = [];
 		var rectanglecolors = [];
+		var squarevertices = [];
+		var squarecolors = [];
+		var trianglevertices = [];
+		var trianglecolors = [];
+		var ellipsevertices = [];
+		var ellipsecolors = [];
+
 		var	bascisparameters = {
-		    		colNum:50,
-		    		rowNum:100,
+		    		colNum:52,
+		    		squarecolNum:40,
+		    		rowNum:150,
     			    marginX: 5.0,
 				    marginY: 5.0,
-				    recWidth: 7.0,
+				    recWidth: 5.0,
 				    recHeight: 20.0,
 				    squareHeigth: 7.0,
+				    marginRecSquare: 6.0,
 				    depth: 0.01,
 				    mouseshiftX: 100,
 				    mouseshiftY: 50,
@@ -90,7 +102,7 @@
 		}
 
         for(var i = 0; i < bascisparameters.rowNum; i++)
-        {           
+        {      
             for(var j = 0; j < bascisparameters.colNum; j++)
             {
                 rectanglecolors.push(1.0, 1.0, 0.0, 1.0);
@@ -103,9 +115,128 @@
             }
         }
 
+
+        //make square data
+        for(var j = 0; j < bascisparameters.squarecolNum; j++)
+        {
+        	var differeceRecSquare = bascisparameters.recHeight - bascisparameters.squareHeigth;
+        	var low  = (bascisparameters.marginY + bascisparameters.squareHeigth + differeceRecSquare)*j + bascisparameters.marginY + bascisparameters.marginRecSquare;
+        	var high = (bascisparameters.marginY + bascisparameters.squareHeigth + differeceRecSquare)*j + bascisparameters.marginY + bascisparameters.squareHeigth + bascisparameters.marginRecSquare;      
+        	 
+        	for(var i = 0;i < bascisparameters.rowNum; i++)
+        	{
+        		var left  = (bascisparameters.marginX+bascisparameters.recWidth)*i + bascisparameters.marginX;
+        		var right = (bascisparameters.marginX+bascisparameters.recWidth)*i + bascisparameters.recWidth + bascisparameters.marginX
+        	
+        		squarevertices.push(right, high, bascisparameters.depth+0.000001);
+        		squarevertices.push(left,  high, bascisparameters.depth+0.000001);
+        		squarevertices.push(right,  low, bascisparameters.depth+0.000001);
+        	
+        		squarevertices.push(left, high, bascisparameters.depth+0.000001);
+        		squarevertices.push(right, low, bascisparameters.depth+0.000001);
+        		squarevertices.push(left,  low, bascisparameters.depth+0.000001);
+        	}
+        }
+
+        for(var i = 0;i<bascisparameters.rowNum; i++)
+        {
+        	for(var j = 0; j < bascisparameters.squarecolNum; j++)
+        	{
+        		squarecolors.push(0.0, 0.5, 0.0, 1.0);
+        		squarecolors.push(0.0, 0.5, 0.0, 1.0);
+        		squarecolors.push(0.0, 0.5, 0.0, 1.0);
+        	
+        		squarecolors.push(0.0, 0.5, 0.0, 1.0);
+        		squarecolors.push(0.0, 0.5, 0.0, 1.0);
+        		squarecolors.push(0.0, 0.5, 0.0, 1.0);
+        	}
+        }
+
+        //make triangle data
+        for(var j = 48; j < bascisparameters.colNum; j++)
+        {
+		    var low  = ( bascisparameters.marginY+ bascisparameters.recHeight)*j +  bascisparameters.marginY;
+		    var high = ( bascisparameters.marginY+ bascisparameters.recHeight)*j +  bascisparameters.marginY +  bascisparameters.recHeight;
+
+        	for(var i = 0;i < bascisparameters.rowNum; i++)
+        	{
+	            var left  = ( bascisparameters.marginX+ bascisparameters.recWidth)*i +  bascisparameters.marginX;
+	            var right = ( bascisparameters.marginX+ bascisparameters.recWidth)*i +  bascisparameters.recWidth +  bascisparameters.marginX;
+
+	            trianglevertices.push(left + bascisparameters.recWidth * 0.5,  low + bascisparameters.recHeight,           bascisparameters.depth+0.000001);
+	            trianglevertices.push(left,                                    low + bascisparameters.recHeight * 0.6667,  bascisparameters.depth+0.000001);
+	            trianglevertices.push(left + bascisparameters.marginX,         low + bascisparameters.recHeight * 0.6667,  bascisparameters.depth+0.000001);
+
+	            trianglevertices.push(left + bascisparameters.recWidth * 0.5,  low,                                        bascisparameters.depth+0.000001);
+	            trianglevertices.push(left,                                    low + bascisparameters.recHeight * 0.3333,  bascisparameters.depth+0.000001);
+	            trianglevertices.push(left + bascisparameters.marginX,         low + bascisparameters.recHeight * 0.3333,  bascisparameters.depth+0.000001);
+
+        		trianglecolors.push(0.0, 0.0, 0.0, 1.0);
+        		trianglecolors.push(0.0, 0.0, 0.0, 1.0);
+        		trianglecolors.push(0.0, 0.0, 0.0, 1.0);
+        		trianglecolors.push(0.0, 0.0, 0.0, 1.0);
+        		trianglecolors.push(0.0, 0.0, 0.0, 1.0);
+        		trianglecolors.push(0.0, 0.0, 0.0, 1.0);
+
+        	}
+        }
+
+        //make ellipse data
+        var halflongaxis = bascisparameters.recHeight * 0.3;
+        var halfshortaxis = bascisparameters.recWidth * 0.5;
+
+        for(var j = 45; j < 46; j++)
+        {
+		    var centerY = ( bascisparameters.marginY+ bascisparameters.recHeight)*j +  bascisparameters.marginY +  bascisparameters.recHeight * 0.5;
+
+        	for(var i = 0;i < bascisparameters.rowNum; i++)
+        	{
+	            var centerX = ( bascisparameters.marginX+ bascisparameters.recWidth)*i +  bascisparameters.recWidth +  bascisparameters.marginX * 0.5;
+
+	            ellipsevertices.push(centerX,                  centerY,                 bascisparameters.depth+0.000001);
+	            ellipsevertices.push(centerX + halfshortaxis,  centerY,                 bascisparameters.depth+0.000001);
+	            ellipsevertices.push(centerX ,                 centerY + halflongaxis,  bascisparameters.depth+0.000001);
+
+	            ellipsevertices.push(centerX,                  centerY,                 bascisparameters.depth+0.000001);
+	            ellipsevertices.push(centerX - halfshortaxis,  centerY,                 bascisparameters.depth+0.000001);
+	            ellipsevertices.push(centerX ,                 centerY + halflongaxis,  bascisparameters.depth+0.000001);
+
+	            ellipsevertices.push(centerX,                  centerY,                 bascisparameters.depth+0.000001);
+	            ellipsevertices.push(centerX + halfshortaxis,  centerY,                 bascisparameters.depth+0.000001);
+	            ellipsevertices.push(centerX ,                 centerY - halflongaxis,  bascisparameters.depth+0.000001);
+
+	            ellipsevertices.push(centerX,                  centerY,                 bascisparameters.depth+0.000001);
+	            ellipsevertices.push(centerX - halfshortaxis,  centerY,                 bascisparameters.depth+0.000001);
+	            ellipsevertices.push(centerX ,                 centerY - halflongaxis,  bascisparameters.depth+0.000001);
+
+        		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
+        		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
+        		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
+
+        		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
+        		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
+        		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
+
+        		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
+        		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
+        		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
+
+        		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
+        		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
+        		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
+        	}
+        }
+
+
         datas = {	
-        		vertexdata:rectanglevertices,
-        		colordata:rectanglecolors
+        		rectanglevertexdata: rectanglevertices,
+        		rectanglecolordata: rectanglecolors,
+        		squarevertexdata: squarevertices,
+        		squarecolordata: squarecolors,
+        		trianglevertexdata: trianglevertices,
+        		trianglecolordata: trianglecolors,
+        		ellipsevertexdata: ellipsevertices,
+        		ellipsecolordata: ellipsecolors
         	};
 
         return datas;
@@ -120,14 +251,12 @@
 		var gl = init.glValue();
 		var wf = new webglFunction(gl);
 		wf.drawElements(datas);
-
-		//drawElements(canvas);
 	}
 </script>
 
 
 <body onload="initialwebgl()">
-    <div><canvas id="glcanvas" style="border: none; position: fixed; left: 150px; top: 20px;background-color:gray" width="1500" height="1300"></canvas></div><br/>
+    <div><canvas id="glcanvas" style="border: none; position: fixed; left: 150px; top: 20px;background-color:gray" width="1505" height="1302"></canvas></div><br/>
 	<div>xpos:<a id="xpos"></a> ypos:<a id="ypos"></a></div>
 	<div>posX:<a id="x"></a></div><div> posY:<a id="y"></a></div></br>
 	<div>pos1:<a id="x1"></a></div><div> pos2:<a id="y1"></a></div></br>

@@ -22,6 +22,10 @@
 <script type="text/javascript" src="apitest.js"></script>
 <script type="text/javascript" src="library.js"></script>
 <script type="text/javascript" src="ruleset2.js"></script>
+<script type="text/javascript" src="jquery.qtip.custom/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="jquery.qtip.custom/jquery.qtip.min.js"></script>
+
+<link type="text/css" rel="stylesheet" href="jquery.qtip.custom/jquery.qtip.css" />
 </head>
 
 <script>
@@ -68,19 +72,19 @@
 		        for(var i = 0; i < bascisparameters.rowNum; i++)
 		        {
 		            var increment = i*1.0/ bascisparameters.rowNum ;
-		            var low  = ( bascisparameters.marginY+ bascisparameters.recHeight)*j +  bascisparameters.marginY;
-		            var high = ( bascisparameters.marginY+ bascisparameters.recHeight)*j +  bascisparameters.marginY +  bascisparameters.recHeight * increment;  
+		            var low  = ( bascisparameters.marginY + bascisparameters.recHeight)*j +  bascisparameters.marginY;
+		            var high = ( bascisparameters.marginY + bascisparameters.recHeight)*j +  bascisparameters.marginY +  bascisparameters.recHeight * increment;  
 
-		            var left  = ( bascisparameters.marginX+ bascisparameters.recWidth)*i +  bascisparameters.marginX;
-		            var right = ( bascisparameters.marginX+ bascisparameters.recWidth)*i +  bascisparameters.recWidth +  bascisparameters.marginX;
+		            var left  = ( bascisparameters.marginX + bascisparameters.recWidth)*i +  bascisparameters.marginX;
+		            var right = ( bascisparameters.marginX + bascisparameters.recWidth)*i +  bascisparameters.recWidth +  bascisparameters.marginX;
 
 		            rectanglevertices.push(right, high,  bascisparameters.depth);
 		            rectanglevertices.push(left,  high,  bascisparameters.depth);
 		            rectanglevertices.push(right,  low,  bascisparameters.depth);
 
-		            rectanglevertices.push(left, high,  bascisparameters.depth);
-		            rectanglevertices.push(right, low,  bascisparameters.depth);
-		            rectanglevertices.push(left,  low,  bascisparameters.depth);
+		            rectanglevertices.push(left,  high,  bascisparameters.depth);
+		            rectanglevertices.push(right,  low,  bascisparameters.depth);
+		            rectanglevertices.push(left,   low,  bascisparameters.depth);
 		        }
 		    }
 		    else
@@ -247,16 +251,34 @@
 	{
 		var datas = makedata();
 		var canvas = document.getElementById("glcanvas");
+		var canvaselement = $('#glcanvas');
 		var init = new initialize(canvas);
 		var gl = init.glValue();
-		var wf = new webglFunction(gl);
+		var wf = new webglFunction(gl,canvaselement);
 		wf.drawElements(datas);
+
+		$('#glcanvas').qtip({
+			content: {
+        		text: "tooltip"
+    		},
+    		position: {
+		        corner: {
+			        target: 'topMiddle',
+			        tooltip: 'bottomMiddle'
+			        },
+			    adjust: {
+			        x: -1000,
+			        y: -1000
+			        }
+	    	},
+	    	style: { classes: 'qtip-light qtip-rounded qtip-shadow qtip-lightwhite' }
+    	});
 	}
 </script>
 
 
 <body onload="initialwebgl()">
-    <div><canvas id="glcanvas" style="border: none; position: fixed; left: 150px; top: 20px;background-color:gray" width="1505" height="1302"></canvas></div><br/>
+    <div id = "canvasdiv"><canvas id="glcanvas" style="border: none; position: fixed; left: 150px; top: 20px;background-color:gray" width="1505" height="1302"></canvas></div><br/>
 	<div>xpos:<a id="xpos"></a> ypos:<a id="ypos"></a></div>
 	<div>posX:<a id="x"></a></div><div> posY:<a id="y"></a></div></br>
 	<div>pos1:<a id="x1"></a></div><div> pos2:<a id="y1"></a></div></br>
@@ -266,7 +288,7 @@
 	<div>IndexNum:<a id="IndNum"></a></div></br>
 	<div>Debug:<a id="debug"></a></div></br>
 	<div>mRIX:<a id="mriX"></a></div><div> mRIY:<a id="mriY"></a></div></br>
-	<div><button type="button" onClick="shrink()">shrink</button><div></br>
+	<div><button type="button" id = "shrinkbutton" onClick="shrink()">shrink</button><div></br>
 	<div><button type="button" onClick="enlarge()">enlarge</button><div></br>
 	<div><button type="button" onClick="showhide()">show/hide</button><div></br>
     <div><button type="button" onClick="removespace()">removespace</button><div></br>

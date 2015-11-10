@@ -18,8 +18,11 @@ function initialize(canvas){
     };
 }
 
-function webglFunction(gl){
+function webglFunction(gl,canvaselement){
 			var self = this;
+			this.contentvalue = "what is this?";
+			this.mouserpositionX= 0;
+			this.mouserpositionY= 0;
 			this.matrixs = {
 				mvMatrix: mat4.create(),
 				pMatrix: mat4.create(),
@@ -27,6 +30,8 @@ function webglFunction(gl){
 			}; 
 
 			this.gl = gl;
+			this.canvaselement = canvaselement;
+			this.showtooltip = false;
 			this.datas = {};
 			this.origindatas = {};
 
@@ -430,7 +435,45 @@ function webglFunction(gl){
 			        self.vertexpositionandcolorbuffers.rectangleVertexPositionBuffer.itemSize = 3;
 			        self.vertexpositionandcolorbuffers.rectangleVertexPositionBuffer.numItems = 6 * self.bascisparameters.rowNum * self.bascisparameters.colNum;
 		    	}
-		    }
+		    };
+
+			(function() {
+				mouseMoveinto  = function (){
+					if(self.showtooltip)
+					{
+						var tooltipValue = self.canvaselement.qtip;
+						var api = self.canvaselement.qtip('api');
+						api.options.content.text = "what is that?";
+						api.options.position.adjust.x = self.mouserpositionX - self.gl.viewportWidth;
+						api.options.position.adjust.y = - self.mouserpositionY;
+						api.options.hide.delay = 100;
+						api.options.hide.fixed = true;
+						api.toggle(true);
+						// self.canvaselement.qtip({
+							// content: {
+				   //      		text: 'My common piece of text here'
+				   //  		},
+				   //  		position: {
+							//       corner: {
+							//         target: 'topLeft',
+							//         tooltip: 'middleRight'
+							//         },
+							//     adjust: {
+							//         x: -1000,
+							//         y: -1000
+							//         }
+					  //   	}
+				   //  	});
+					}
+					else
+					{
+						var api = self.canvaselement.qtip('api');
+						api.toggle(false);
+					}
+				}
+
+				$(self.canvaselement)[0].addEventListener('mousemove', mouseMoveinto);
+			})();
 
 		   	this.handleMouseMove = function(event) 
 		    {   
@@ -466,6 +509,9 @@ function webglFunction(gl){
 		                outY = true;
 		        }
 
+    			self.mouserpositionX = xMouse;
+				self.mouserpositionY = yMouse;
+
 		        if(!outX)
 		        {
 	                var indXMouse = Math.floor((xMouse - bascisparameters.marginX)/(bascisparameters.marginX + bascisparameters.recWidth)); // X index of rectangle mouse on
@@ -481,9 +527,21 @@ function webglFunction(gl){
 
 	                self.bascisparameters.Xindex = indXMouse;
 	                self.bascisparameters.Yindex = indYMouse;
+
+	                if(outY)
+	                {
+	                	self.showtooltip = false;
+	                	$(self.canvaselement).trigger("mouseoversample");
+	                }
+
+	                self.showtooltip = true;
+	            	
+	                $(self.canvaselement).trigger("mouseoversample");
 		        }
 		        else
 		        {
+		        	self.showtooltip = false;
+		        	
 		            if(self.bascisparameters.Xindex !== undefined)
 		            {
 		                self.restoreVerticesAndColor();
@@ -498,12 +556,13 @@ function webglFunction(gl){
 		        self.drawScene();
 		    };
 
+
+
 			this.drawElements = function(datas)
 			{
 				this.gl.clearColor(0.7, 0.7, 0.7, 1.0);
         		this.gl.enable(gl.DEPTH_TEST);
 
-        		//datas.wirevertexdata = new Float32Array();
         		this.initBuffers(datas);
         		this.datas = datas;
 

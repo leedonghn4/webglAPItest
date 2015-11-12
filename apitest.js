@@ -188,6 +188,10 @@ function webglFunction(gl,canvaselement){
 		        return shader;
 		    };
 
+		    this.findGeneClinicData = function ()
+		    {
+		    }
+
     	    this.initShaders = function() 
 		    {
 		        //shader 0

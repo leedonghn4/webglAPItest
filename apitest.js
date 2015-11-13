@@ -45,7 +45,9 @@ function webglFunction(gl,canvaselement){
 				wireVertexPositionBuffer:this.gl.createBuffer(),
 				wireVertexColorBuffer:this.gl.createBuffer(),
 				ellipseVertexPositionBuffer:this.gl.createBuffer(),
-				ellipseVertexColorBuffer:this.gl.createBuffer()
+				ellipseVertexColorBuffer:this.gl.createBuffer(),
+				lineVertexPositionBuffer:this.gl.createBuffer(),
+				lineeVertexColorBuffer:this.gl.createBuffer(),
 			}; 
 
 		    this.bascisparameters = {
@@ -281,7 +283,6 @@ function webglFunction(gl,canvaselement){
 				//draw rectangle wire
 				if(this.datas.wirevertexdata !== undefined)
 				{
-
 	                var lineVertexColorBuffer = this.gl.createBuffer();
 		            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, lineVertexColorBuffer);
 		            var colors = [
@@ -297,17 +298,7 @@ function webglFunction(gl,canvaselement){
 		            this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(colors), this.gl.STATIC_DRAW);
 		            lineVertexColorBuffer.itemSize = 4;
 		            lineVertexColorBuffer.numItems = 2*4;
-		            
-		    		var vtx = new Float32Array(
-		    		[50,  50, this.bascisparameters.depth+0.0001,
-		    		 0,  50,  this.bascisparameters.depth+0.0001,
-		    		 0,  0, this.bascisparameters.depth+0.0001,
-		    		 50, 0, this.bascisparameters.depth+0.0001,
-		    		 0,  50,  this.bascisparameters.depth+0.0001,
-		    		 0, 0,  this.bascisparameters.depth+0.0001,
-		    		 50, 50, this.bascisparameters.depth+0.0001,
-		    		 50, 0,  this.bascisparameters.depth+0.0001]
-		    		);
+
 		    		var vbuf = this.gl.createBuffer();
 		    		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, vbuf);
 		    		this.gl.bufferData(this.gl.ARRAY_BUFFER, this.datas.wirevertexdata, this.gl.STATIC_DRAW);
@@ -324,6 +315,35 @@ function webglFunction(gl,canvaselement){
 		    		this.setMatrixUniforms();
 		    		this.gl.drawElements(this.gl.LINES, 8, this.gl.UNSIGNED_SHORT, 0);
 	    		}
+
+
+				//draw lines
+				if(this.datas.linevertexdata.length > 0)
+				{
+	                var linesVertexColorBuffer = this.gl.createBuffer();
+		            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, linesVertexColorBuffer);
+		            var colors = this.datas.linecolordata;
+		            this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(colors), this.gl.STATIC_DRAW);
+		            linesVertexColorBuffer.itemSize = 4;
+		            linesVertexColorBuffer.numItems = this.datas.linecolordata.length/4;
+		            
+		    		var vtx = new Float32Array(this.datas.linevertexdata);
+		    		var vbuf = this.gl.createBuffer();
+		    		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, vbuf);
+		    		this.gl.bufferData(this.gl.ARRAY_BUFFER, vtx, this.gl.STATIC_DRAW);
+
+		            var idx = new Uint16Array(this.datas.lineindexdata);
+		    		var ibuf = this.gl.createBuffer();
+		    		this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, ibuf);
+		    		this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, idx, this.gl.STATIC_DRAW);
+		    		this.gl.vertexAttribPointer(this.shaderprogram.vertexPositionAttribute, 3, this.gl.FLOAT, false, 0, 0);
+		    		
+		    		this.gl.lineWidth(2.0);
+		    		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, linesVertexColorBuffer);
+		    		this.gl.vertexAttribPointer(this.shaderprogram.vertexColorAttribute, 4, this.gl.FLOAT, false, 0, 0);
+		    		this.setMatrixUniforms();
+		    		this.gl.drawElements(this.gl.LINES, this.datas.linecolordata.length/4, this.gl.UNSIGNED_SHORT, 0);
+				}
 			};
 
 

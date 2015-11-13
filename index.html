@@ -41,6 +41,9 @@
 		var trianglecolors = [];
 		var ellipsevertices = [];
 		var ellipsecolors = [];
+		var linecolors = [];
+		var linevertices = [];
+		var lineindices = [];
 
 		var	bascisparameters = {
 		    		colNum:52,
@@ -232,6 +235,24 @@
         }
 
 
+        for(var j = 44; j < 45; j++)
+        {
+		    var low  = ( bascisparameters.marginY+ bascisparameters.recHeight)*j +  bascisparameters.marginY;
+
+        	for(var i = 0;i < bascisparameters.rowNum; i++)
+        	{
+	            var left  = ( bascisparameters.marginX + bascisparameters.recWidth)*i +  bascisparameters.marginX;
+
+	            linevertices.push(left,                  low + bascisparameters.recHeight,                 bascisparameters.depth+0.000001);
+	            linevertices.push(left + bascisparameters.recWidth,       low,     bascisparameters.depth+0.000001);
+
+        		linecolors.push(0.0, 0.0, 0.0, 1.0);
+        		linecolors.push(0.0, 0.0, 0.0, 1.0);
+
+        		lineindices.push(i*2, i*2 + 1);
+        	}
+        }
+
         datas = {	
         		rectanglevertexdata: rectanglevertices,
         		rectanglecolordata: rectanglecolors,
@@ -240,7 +261,10 @@
         		trianglevertexdata: trianglevertices,
         		trianglecolordata: trianglecolors,
         		ellipsevertexdata: ellipsevertices,
-        		ellipsecolordata: ellipsecolors
+        		ellipsecolordata: ellipsecolors,
+        		linevertexdata: linevertices,
+        		linecolordata: linecolors,
+        		lineindexdata: lineindices
         	};
 
         return datas;

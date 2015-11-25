@@ -30,7 +30,28 @@
 
 <script>
 
-	var makedata = function()
+	var showmutation = true;		
+	var	bascisparameters = {
+		    		colNum:52,
+		    		squarecolNum:40,
+		    		rowNum:150,
+    			    marginX: 5.0,
+				    marginY: 5.0,
+				    recWidth: 5.0,
+				    recHeight: 20.0,
+				    squareHeigth: 7.0,
+				    marginRecSquare: 6.0,
+				    depth: 0.01,
+				    mouseshiftX: 150,
+				    mouseshiftY: 20,
+				    scalepercentage: 0.185, //scale percentage
+				    incresortstatus: true,
+			        showmutation: false,
+			    	zoomValue: 1.0
+	    	};
+
+	    	
+	var makedata = function(marginX)
 	{
 		var datas;
 		var rectanglevertices = [];
@@ -45,24 +66,11 @@
 		var linevertices = [];
 		var lineindices = [];
 
-		var	bascisparameters = {
-		    		colNum:52,
-		    		squarecolNum:40,
-		    		rowNum:150,
-    			    marginX: 5.0,
-				    marginY: 5.0,
-				    recWidth: 5.0,
-				    recHeight: 20.0,
-				    squareHeigth: 7.0,
-				    marginRecSquare: 6.0,
-				    depth: 0.01,
-				    mouseshiftX: 100,
-				    mouseshiftY: 50,
-				    scalepercentage: 0.185, //scale percentage
-				    incresortstatus: true,
-			        showmutation: false,
-			    	zoomValue: 1.0
-	    	};
+
+	   	if(marginX != undefined)
+	   	{
+	   		bascisparameters.marginX = marginX;
+	   	}
 
 		for(var j = 0; j < bascisparameters.colNum; j++)
 		{
@@ -170,13 +178,13 @@
 	            var left  = ( bascisparameters.marginX+ bascisparameters.recWidth)*i +  bascisparameters.marginX;
 	            var right = ( bascisparameters.marginX+ bascisparameters.recWidth)*i +  bascisparameters.recWidth +  bascisparameters.marginX;
 
-	            trianglevertices.push(left + bascisparameters.recWidth * 0.5,  low + bascisparameters.recHeight,           bascisparameters.depth+0.000001);
-	            trianglevertices.push(left,                                    low + bascisparameters.recHeight * 0.6667,  bascisparameters.depth+0.000001);
-	            trianglevertices.push(left + bascisparameters.marginX,         low + bascisparameters.recHeight * 0.6667,  bascisparameters.depth+0.000001);
+	            trianglevertices.push(left + bascisparameters.recWidth * 0.5,  low + bascisparameters.recHeight,           bascisparameters.depth + 0.000001);
+	            trianglevertices.push(left,                                    low + bascisparameters.recHeight * 0.6667,  bascisparameters.depth + 0.000001);
+	            trianglevertices.push(left + bascisparameters.marginX,         low + bascisparameters.recHeight * 0.6667,  bascisparameters.depth + 0.000001);
 
-	            trianglevertices.push(left + bascisparameters.recWidth * 0.5,  low,                                        bascisparameters.depth+0.000001);
-	            trianglevertices.push(left,                                    low + bascisparameters.recHeight * 0.3333,  bascisparameters.depth+0.000001);
-	            trianglevertices.push(left + bascisparameters.marginX,         low + bascisparameters.recHeight * 0.3333,  bascisparameters.depth+0.000001);
+	            trianglevertices.push(left + bascisparameters.recWidth * 0.5,  low,                                        bascisparameters.depth + 0.000001);
+	            trianglevertices.push(left,                                    low + bascisparameters.recHeight * 0.3333,  bascisparameters.depth + 0.000001);
+	            trianglevertices.push(left + bascisparameters.marginX,         low + bascisparameters.recHeight * 0.3333,  bascisparameters.depth + 0.000001);
 
         		trianglecolors.push(0.0, 0.0, 0.0, 1.0);
         		trianglecolors.push(0.0, 0.0, 0.0, 1.0);
@@ -184,7 +192,6 @@
         		trianglecolors.push(0.0, 0.0, 0.0, 1.0);
         		trianglecolors.push(0.0, 0.0, 0.0, 1.0);
         		trianglecolors.push(0.0, 0.0, 0.0, 1.0);
-
         	}
         }
 
@@ -194,27 +201,27 @@
 
         for(var j = 45; j < 46; j++)
         {
-		    var centerY = ( bascisparameters.marginY+ bascisparameters.recHeight)*j +  bascisparameters.marginY +  bascisparameters.recHeight * 0.5;
+		    var centerY = ( bascisparameters.marginY + bascisparameters.recHeight)*j +  bascisparameters.marginY +  bascisparameters.recHeight * 0.5;
 
         	for(var i = 0;i < bascisparameters.rowNum; i++)
         	{
-	            var centerX = ( bascisparameters.marginX+ bascisparameters.recWidth)*i +  bascisparameters.recWidth +  bascisparameters.marginX * 0.5;
+	            var centerX = ( bascisparameters.marginX + bascisparameters.recWidth)*i +  bascisparameters.recWidth +  bascisparameters.marginX * 0.5;
 
-	            ellipsevertices.push(centerX,                  centerY,                 bascisparameters.depth+0.000001);
-	            ellipsevertices.push(centerX + halfshortaxis,  centerY,                 bascisparameters.depth+0.000001);
-	            ellipsevertices.push(centerX ,                 centerY + halflongaxis,  bascisparameters.depth+0.000001);
+	            ellipsevertices.push(centerX,                  centerY,                 bascisparameters.depth + 0.000001);
+	            ellipsevertices.push(centerX + halfshortaxis,  centerY,                 bascisparameters.depth + 0.000001);
+	            ellipsevertices.push(centerX,                  centerY + halflongaxis,  bascisparameters.depth + 0.000001);
 
-	            ellipsevertices.push(centerX,                  centerY,                 bascisparameters.depth+0.000001);
-	            ellipsevertices.push(centerX - halfshortaxis,  centerY,                 bascisparameters.depth+0.000001);
-	            ellipsevertices.push(centerX ,                 centerY + halflongaxis,  bascisparameters.depth+0.000001);
+	            ellipsevertices.push(centerX,                  centerY,                 bascisparameters.depth + 0.000001);
+	            ellipsevertices.push(centerX - halfshortaxis,  centerY,                 bascisparameters.depth + 0.000001);
+	            ellipsevertices.push(centerX,                  centerY + halflongaxis,  bascisparameters.depth + 0.000001);
 
-	            ellipsevertices.push(centerX,                  centerY,                 bascisparameters.depth+0.000001);
-	            ellipsevertices.push(centerX + halfshortaxis,  centerY,                 bascisparameters.depth+0.000001);
-	            ellipsevertices.push(centerX ,                 centerY - halflongaxis,  bascisparameters.depth+0.000001);
+	            ellipsevertices.push(centerX,                  centerY,                 bascisparameters.depth + 0.000001);
+	            ellipsevertices.push(centerX + halfshortaxis,  centerY,                 bascisparameters.depth + 0.000001);
+	            ellipsevertices.push(centerX,                  centerY - halflongaxis,  bascisparameters.depth + 0.000001);
 
-	            ellipsevertices.push(centerX,                  centerY,                 bascisparameters.depth+0.000001);
-	            ellipsevertices.push(centerX - halfshortaxis,  centerY,                 bascisparameters.depth+0.000001);
-	            ellipsevertices.push(centerX ,                 centerY - halflongaxis,  bascisparameters.depth+0.000001);
+	            ellipsevertices.push(centerX,                  centerY,                 bascisparameters.depth + 0.000001);
+	            ellipsevertices.push(centerX - halfshortaxis,  centerY,                 bascisparameters.depth + 0.000001);
+	            ellipsevertices.push(centerX,                  centerY - halflongaxis,  bascisparameters.depth + 0.000001);
 
         		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
         		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
@@ -270,6 +277,268 @@
         return datas;
 	}
 
+	var shrink = function()
+	{
+		var canvas = document.getElementById("glcanvas");
+		var cwidth = canvas.width;
+		canvas.width = cwidth/2;
+
+		bascisparameters.rowNum = bascisparameters.rowNum / 2;
+
+		var datas = makedata();
+		if(!showmutation  && datas.squarevertexdata)
+		{
+			datas.squarevertexdata = undefined;
+			datas.squarecolordata = undefined;
+		}
+		
+		var canvaselement = $('#glcanvas');
+		var init = new initialize(canvas);
+		var gl = init.glValue();
+		var wf = new webglFunction(gl,canvaselement,bascisparameters);
+		wf.drawElements(datas);
+
+		$('#glcanvas').qtip({
+			content: {
+        				text: "tooltip"
+    				 },
+    		position: {
+		        corner: {
+					        target: 'topMiddle',
+					        tooltip: 'bottomMiddle'
+			            },
+			    adjust: {
+					        x: -1000,
+					        y: -1000
+			        	}
+	    	},
+	    	style: { classes: 'qtip-light qtip-rounded qtip-shadow qtip-lightwhite' }
+    	});
+	}
+
+	var enlarge = function()
+	{
+		var canvas = document.getElementById("glcanvas");
+		var cwidth = canvas.width;
+		canvas.width = cwidth * 2;
+
+		bascisparameters.rowNum = bascisparameters.rowNum * 2;
+
+		var datas = makedata();
+		if(!showmutation  && datas.squarevertexdata)
+		{
+			datas.squarevertexdata = undefined;
+			datas.squarecolordata = undefined;
+		}
+
+		var canvaselement = $('#glcanvas');
+		var init = new initialize(canvas);
+		var gl = init.glValue();
+		var wf = new webglFunction(gl,canvaselement,bascisparameters);
+		wf.drawElements(datas);
+
+		$('#glcanvas').qtip({
+			content: {
+        				text: "tooltip"
+    				 },
+    		position: {
+		        corner: {
+					        target: 'topMiddle',
+					        tooltip: 'bottomMiddle'
+			            },
+			    adjust: {
+					        x: -1000,
+					        y: -1000
+			        	}
+	    	},
+	    	style: { classes: 'qtip-light qtip-rounded qtip-shadow qtip-lightwhite' }
+    	});
+	}
+
+	var showhide = function()
+	{
+		var datas = makedata();
+
+		showmutation = !showmutation;
+		if(!showmutation)
+		{
+			datas.squarevertexdata = undefined;
+			datas.squarecolordata = undefined;
+		}
+
+		var canvas = document.getElementById("glcanvas");
+		var canvaselement = $('#glcanvas');
+		var init = new initialize(canvas);
+		var gl = init.glValue();
+		var wf = new webglFunction(gl,canvaselement,bascisparameters);
+		wf.drawElements(datas);
+
+		$('#glcanvas').qtip({
+			content: {
+        				text: "tooltip"
+    				 },
+    		position: {
+		        corner: {
+					        target: 'topMiddle',
+					        tooltip: 'bottomMiddle'
+			            },
+			    adjust: {
+					        x: -1000,
+					        y: -1000
+			        	}
+	    	},
+	    	style: { classes: 'qtip-light qtip-rounded qtip-shadow qtip-lightwhite' }
+    	});
+	}
+
+	var removespace= function()
+	{
+		var spacewidth = 0;
+
+		var datas = makedata(spacewidth);
+
+		if(!showmutation && datas.squarevertexdata)
+		{
+			datas.squarevertexdata = undefined;
+			datas.squarecolordata = undefined;
+		}
+
+		var canvas = document.getElementById("glcanvas");
+
+		var cwidth = bascisparameters.rowNum * bascisparameters.recWidth;
+		canvas.width = cwidth;
+
+		var canvaselement = $('#glcanvas');
+		var init = new initialize(canvas);
+		var gl = init.glValue();
+		var wf = new webglFunction(gl,canvaselement,bascisparameters);
+		wf.drawElements(datas);
+
+		$('#glcanvas').qtip({
+			content: {
+        				text: "tooltip"
+    				 },
+    		position: {
+		        corner: {
+					        target: 'topMiddle',
+					        tooltip: 'bottomMiddle'
+			            },
+			    adjust: {
+					        x: -1000,
+					        y: -1000
+			        	}
+	    	},
+	    	style: { classes: 'qtip-light qtip-rounded qtip-shadow qtip-lightwhite' }
+    	});
+
+	}
+
+	var withspace= function()
+	{
+		bascisparameters.marginX = 5;
+		var datas = makedata();
+
+		if(!showmutation && datas.squarevertexdata)
+		{
+			datas.squarevertexdata = undefined;
+			datas.squarecolordata = undefined;
+		}
+
+		var canvas = document.getElementById("glcanvas");
+
+		var cwidth = bascisparameters.rowNum * (bascisparameters.recWidth + bascisparameters.marginX) + bascisparameters.marginX;
+		canvas.width = cwidth;
+
+		var canvaselement = $('#glcanvas');
+		var init = new initialize(canvas);
+		var gl = init.glValue();
+		var wf = new webglFunction(gl,canvaselement,bascisparameters);
+		wf.drawElements(datas);
+
+		$('#glcanvas').qtip({
+			content: {
+        				text: "tooltip"
+    				 },
+    		position: {
+		        corner: {
+					        target: 'topMiddle',
+					        tooltip: 'bottomMiddle'
+			            },
+			    adjust: {
+					        x: -1000,
+					        y: -1000
+			        	}
+	    	},
+	    	style: { classes: 'qtip-light qtip-rounded qtip-shadow qtip-lightwhite' }
+    	});
+	}
+	var addtrack = function()
+	{
+		var tcolNum = bascisparameters.colNum + 1;
+		bascisparameters.colNum = tcolNum;
+		var datas = makedata();
+		var canvas = document.getElementById("glcanvas");
+		var cheight = canvas.height + bascisparameters.recHeight + bascisparameters.marginY; 
+		canvas.height = cheight;	
+
+		var canvaselement = $('#glcanvas');
+		var init = new initialize(canvas);
+		var gl = init.glValue();
+		var wf = new webglFunction(gl,canvaselement,bascisparameters);
+		wf.drawElements(datas);
+
+		$('#glcanvas').qtip({
+			content: {
+        				text: "tooltip"
+    				 },
+    		position: {
+		        corner: {
+					        target: 'topMiddle',
+					        tooltip: 'bottomMiddle'
+			            },
+			    adjust: {
+					        x: -1000,
+					        y: -1000
+			        	}
+	    	},
+	    	style: { classes: 'qtip-light qtip-rounded qtip-shadow qtip-lightwhite' }
+    	});
+	}
+
+	var deltrack = function()
+	{
+		var tcolNum = bascisparameters.colNum - 1;
+		bascisparameters.colNum = tcolNum;
+
+		var datas = makedata();
+		var canvas = document.getElementById("glcanvas");
+		var cheight= canvas.height - bascisparameters.recHeight - bascisparameters.marginY; 
+		canvas.height = cheight;	
+
+
+		var canvaselement = $('#glcanvas');
+		var init = new initialize(canvas);
+		var gl = init.glValue();
+		var wf = new webglFunction(gl,canvaselement,bascisparameters);
+		wf.drawElements(datas);
+
+		$('#glcanvas').qtip({
+			content: {
+        				text: "tooltip"
+    				 },
+    		position: {
+		        corner: {
+					        target: 'topMiddle',
+					        tooltip: 'bottomMiddle'
+			            },
+			    adjust: {
+					        x: -1000,
+					        y: -1000
+			        	}
+	    	},
+	    	style: { classes: 'qtip-light qtip-rounded qtip-shadow qtip-lightwhite' }
+    	});	
+	}
 
 	var initialwebgl = function()
 	{
@@ -278,22 +547,22 @@
 		var canvaselement = $('#glcanvas');
 		var init = new initialize(canvas);
 		var gl = init.glValue();
-		var wf = new webglFunction(gl,canvaselement);
+		var wf = new webglFunction(gl,canvaselement,bascisparameters);
 		wf.drawElements(datas);
 
 		$('#glcanvas').qtip({
 			content: {
-        		text: "tooltip"
-    		},
+        				text: "tooltip"
+    				 },
     		position: {
 		        corner: {
-			        target: 'topMiddle',
-			        tooltip: 'bottomMiddle'
-			        },
+					        target: 'topMiddle',
+					        tooltip: 'bottomMiddle'
+			            },
 			    adjust: {
-			        x: -1000,
-			        y: -1000
-			        }
+					        x: -1000,
+					        y: -1000
+			        	}
 	    	},
 	    	style: { classes: 'qtip-light qtip-rounded qtip-shadow qtip-lightwhite' }
     	});

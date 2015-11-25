@@ -6,6 +6,7 @@ function initialize(canvas){
         var gl;
         try 
         {
+        	gl = null;
             gl = this.canvas.getContext("experimental-webgl");
             gl.viewportWidth = canvas.width;
             gl.viewportHeight = canvas.height;
@@ -18,7 +19,23 @@ function initialize(canvas){
     };
 }
 
-function webglFunction(gl,canvaselement){
+function makeData(dataStylePosition,parameterGroup)
+{
+	this.dataposition = dataStylePosition;
+	this.parameterGroup = parameterGroup;
+	this.dataValue = function()
+	{
+		for(i = 0 ; i < this.dataposition.length; i++)
+		{
+			for(j = 0 ; j < this.dataposition[i].length; j++)
+			{
+
+			}
+		}
+	};
+}
+
+function webglFunction(gl,canvaselement,bascisparameters){
 			var self = this;
 			this.contentvalue = "what is this?";
 			this.mouserpositionX= 0;
@@ -50,25 +67,7 @@ function webglFunction(gl,canvaselement){
 				lineeVertexColorBuffer:this.gl.createBuffer(),
 			}; 
 
-		    this.bascisparameters = {
-		    		colNum:52,
-		    		rowNum:150,
-		    		squarecolNum:40,
-    			    marginX: 5.0,
-				    marginY: 5.0,
-				    recWidth: 5.0,
-				    recHeight: 20.0,
-				    squareHeigth: 7.0,
-				    depth: 0.01,
-				    mouseshiftX: 150,
-				    mouseshiftY: 20,
-				    scalepercentage: 0.185, //scale percentage
-				    incresortstatus: true,
-			        showmutation: false,
-			        Xindex:undefined,
-			        Yindex:undefined,
-			    	zoomValue: 1.0
-	    	};
+			this.bascisparameters = bascisparameters;
 
 		    this.initBuffers = function(datas) 
 			{			
@@ -399,13 +398,13 @@ function webglFunction(gl,canvaselement){
 			        var high = (self.bascisparameters.marginY + self.bascisparameters.recHeight) * YindexMouse + self.bascisparameters.marginY + self.bascisparameters.recHeight;
 
 		            self.datas.wirevertexdata = new Float32Array([right, high, self.bascisparameters.depth+0.01,
-		            											left, high, self.bascisparameters.depth+0.01,
-	            											    right, low, self.bascisparameters.depth+0.01,
-		            											left, low, self.bascisparameters.depth+0.01,
-		            											right, high, self.bascisparameters.depth+0.01,
-		            											right, low, self.bascisparameters.depth+0.01,
-		            											left, high, self.bascisparameters.depth+0.01,
-		            											left, low, self.bascisparameters.depth+0.01]);
+		            											  left,  high, self.bascisparameters.depth+0.01,
+	            											      right, low,  self.bascisparameters.depth+0.01,
+		            											  left,  low,  self.bascisparameters.depth+0.01,
+		            											  right, high, self.bascisparameters.depth+0.01,
+		            											  right, low,  self.bascisparameters.depth+0.01,
+		            											  left,  high, self.bascisparameters.depth+0.01,
+		            											  left,  low,  self.bascisparameters.depth+0.01]);
 
 			        self.vertexpositionandcolorbuffers.rectangleVertexPositionBuffer = self.gl.createBuffer();
 			        self.gl.bindBuffer(self.gl.ARRAY_BUFFER, self.vertexpositionandcolorbuffers.rectangleVertexPositionBuffer);
@@ -473,21 +472,6 @@ function webglFunction(gl,canvaselement){
 						api.options.hide.delay = 100;
 						api.options.hide.fixed = true;
 						api.toggle(true);
-						// self.canvaselement.qtip({
-							// content: {
-				   //      		text: 'My common piece of text here'
-				   //  		},
-				   //  		position: {
-							//       corner: {
-							//         target: 'topLeft',
-							//         tooltip: 'middleRight'
-							//         },
-							//     adjust: {
-							//         x: -1000,
-							//         y: -1000
-							//         }
-					  //   	}
-				   //  	});
 					}
 					else
 					{

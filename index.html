@@ -30,7 +30,9 @@
 
 <script>
 
-	var showmutation = true;		
+	var showmutation = true;
+	var originalmarginX = 5.0;		
+	var originalrecWidth = 5.0;	
 	var	bascisparameters = {
 		    		colNum:52,
 		    		squarecolNum:40,
@@ -50,7 +52,232 @@
 			    	zoomValue: 1.0
 	    	};
 
-	    	
+	var makedecreasedata = function(marginX)
+	{
+		var datas;
+		var rectanglevertices = [];
+		var rectanglecolors = [];
+		var squarevertices = [];
+		var squarecolors = [];
+		var trianglevertices = [];
+		var trianglecolors = [];
+		var ellipsevertices = [];
+		var ellipsecolors = [];
+		var linecolors = [];
+		var linevertices = [];
+		var lineindices = [];
+
+
+	   	if(marginX != undefined)
+	   	{
+	   		bascisparameters.marginX = marginX;
+	   	}
+
+		for(var j = 0; j < bascisparameters.colNum; j++)
+		{
+
+		    var low  = ( bascisparameters.marginY+ bascisparameters.recHeight)*j +  bascisparameters.marginY;
+		    var high = ( bascisparameters.marginY+ bascisparameters.recHeight)*j +  bascisparameters.marginY +  bascisparameters.recHeight;      
+
+		    if(j === 47 )
+		    {
+		        for(var i = 0; i < bascisparameters.rowNum; i++)
+		        {
+		            var increment = (bascisparameters.rowNum - i) * 1.0/ bascisparameters.rowNum;
+
+		            var low  = ( bascisparameters.marginY + bascisparameters.recHeight)*j +  bascisparameters.marginY;
+		            var high = ( bascisparameters.marginY + bascisparameters.recHeight)*j +  bascisparameters.marginY +  bascisparameters.recHeight * increment;  
+
+		            var left  = ( bascisparameters.marginX + bascisparameters.recWidth)*i +  bascisparameters.marginX;
+		            var right = ( bascisparameters.marginX + bascisparameters.recWidth)*i +  bascisparameters.recWidth +  bascisparameters.marginX;
+
+		            rectanglevertices.push(right, high,  bascisparameters.depth);
+		            rectanglevertices.push(left,  high,  bascisparameters.depth);
+		            rectanglevertices.push(right,  low,  bascisparameters.depth);
+
+		            rectanglevertices.push(left,  high,  bascisparameters.depth);
+		            rectanglevertices.push(right,  low,  bascisparameters.depth);
+		            rectanglevertices.push(left,   low,  bascisparameters.depth);
+		        }
+		    }
+		    else
+		    {
+		        for(var i = 0; i < bascisparameters.rowNum; i++)
+		        {
+		                var left  = ( bascisparameters.marginX+ bascisparameters.recWidth)*i +  bascisparameters.marginX;
+		                var right = ( bascisparameters.marginX+ bascisparameters.recWidth)*i +  bascisparameters.recWidth +  bascisparameters.marginX;
+
+		                rectanglevertices.push(right, high,  bascisparameters.depth);
+		                rectanglevertices.push(left,  high,  bascisparameters.depth);
+		                rectanglevertices.push(right,  low,  bascisparameters.depth);
+
+		                rectanglevertices.push(left, high,  bascisparameters.depth);
+		                rectanglevertices.push(right, low,  bascisparameters.depth);
+		                rectanglevertices.push(left,  low,  bascisparameters.depth);
+		        }
+		    }
+		}
+
+        for(var i = 0; i < bascisparameters.rowNum; i++)
+        {      
+            for(var j = 0; j < bascisparameters.colNum; j++)
+            {
+                rectanglecolors.push(1.0, 1.0, 0.0, 1.0);
+                rectanglecolors.push(1.0, 1.0, 0.0, 1.0);
+                rectanglecolors.push(1.0, 1.0, 0.0, 1.0);
+
+                rectanglecolors.push(1.0, 1.0, 0.0, 1.0);
+                rectanglecolors.push(1.0, 1.0, 0.0, 1.0);
+                rectanglecolors.push(1.0, 1.0, 0.0, 1.0);
+            }
+        }
+
+
+        //make square data
+        for(var j = 0; j < bascisparameters.squarecolNum; j++)
+        {
+        	var differeceRecSquare = bascisparameters.recHeight - bascisparameters.squareHeigth;
+        	var low  = (bascisparameters.marginY + bascisparameters.squareHeigth + differeceRecSquare)*j + bascisparameters.marginY + bascisparameters.marginRecSquare;
+        	var high = (bascisparameters.marginY + bascisparameters.squareHeigth + differeceRecSquare)*j + bascisparameters.marginY + bascisparameters.squareHeigth + bascisparameters.marginRecSquare;      
+        	 
+        	for(var i = 0;i < bascisparameters.rowNum; i++)
+        	{
+        		var left  = (bascisparameters.marginX+bascisparameters.recWidth)*i + bascisparameters.marginX;
+        		var right = (bascisparameters.marginX+bascisparameters.recWidth)*i + bascisparameters.recWidth + bascisparameters.marginX
+        	
+        		squarevertices.push(right, high, bascisparameters.depth+0.000001);
+        		squarevertices.push(left,  high, bascisparameters.depth+0.000001);
+        		squarevertices.push(right,  low, bascisparameters.depth+0.000001);
+        	
+        		squarevertices.push(left, high, bascisparameters.depth+0.000001);
+        		squarevertices.push(right, low, bascisparameters.depth+0.000001);
+        		squarevertices.push(left,  low, bascisparameters.depth+0.000001);
+        	}
+        }
+
+        for(var i = 0;i<bascisparameters.rowNum; i++)
+        {
+        	for(var j = 0; j < bascisparameters.squarecolNum; j++)
+        	{
+        		squarecolors.push(0.0, 0.5, 0.0, 1.0);
+        		squarecolors.push(0.0, 0.5, 0.0, 1.0);
+        		squarecolors.push(0.0, 0.5, 0.0, 1.0);
+        	
+        		squarecolors.push(0.0, 0.5, 0.0, 1.0);
+        		squarecolors.push(0.0, 0.5, 0.0, 1.0);
+        		squarecolors.push(0.0, 0.5, 0.0, 1.0);
+        	}
+        }
+
+        //make triangle data
+        for(var j = 48; j < bascisparameters.colNum; j++)
+        {
+		    var low  = ( bascisparameters.marginY+ bascisparameters.recHeight)*j +  bascisparameters.marginY;
+		    var high = ( bascisparameters.marginY+ bascisparameters.recHeight)*j +  bascisparameters.marginY +  bascisparameters.recHeight;
+
+        	for(var i = 0;i < bascisparameters.rowNum; i++)
+        	{
+	            var left  = ( bascisparameters.marginX+ bascisparameters.recWidth)*i +  bascisparameters.marginX;
+	            var right = ( bascisparameters.marginX+ bascisparameters.recWidth)*i +  bascisparameters.recWidth +  bascisparameters.marginX;
+
+	            trianglevertices.push(left + bascisparameters.recWidth * 0.5,  low + bascisparameters.recHeight,           bascisparameters.depth + 0.000001);
+	            trianglevertices.push(left,                                    low + bascisparameters.recHeight * 0.6667,  bascisparameters.depth + 0.000001);
+	            trianglevertices.push(left + bascisparameters.marginX,         low + bascisparameters.recHeight * 0.6667,  bascisparameters.depth + 0.000001);
+
+	            trianglevertices.push(left + bascisparameters.recWidth * 0.5,  low,                                        bascisparameters.depth + 0.000001);
+	            trianglevertices.push(left,                                    low + bascisparameters.recHeight * 0.3333,  bascisparameters.depth + 0.000001);
+	            trianglevertices.push(left + bascisparameters.marginX,         low + bascisparameters.recHeight * 0.3333,  bascisparameters.depth + 0.000001);
+
+        		trianglecolors.push(0.0, 0.0, 0.0, 1.0);
+        		trianglecolors.push(0.0, 0.0, 0.0, 1.0);
+        		trianglecolors.push(0.0, 0.0, 0.0, 1.0);
+        		trianglecolors.push(0.0, 0.0, 0.0, 1.0);
+        		trianglecolors.push(0.0, 0.0, 0.0, 1.0);
+        		trianglecolors.push(0.0, 0.0, 0.0, 1.0);
+        	}
+        }
+
+        //make ellipse data
+        var halflongaxis = bascisparameters.recHeight * 0.3;
+        var halfshortaxis = bascisparameters.recWidth * 0.5;
+
+        for(var j = 45; j < 46; j++)
+        {
+		    var centerY = ( bascisparameters.marginY + bascisparameters.recHeight)*j +  bascisparameters.marginY +  bascisparameters.recHeight * 0.5;
+
+        	for(var i = 0;i < bascisparameters.rowNum; i++)
+        	{
+	            var centerX = ( bascisparameters.marginX + bascisparameters.recWidth)*i +  bascisparameters.recWidth +  bascisparameters.marginX * 0.5;
+
+	            ellipsevertices.push(centerX,                  centerY,                 bascisparameters.depth + 0.000001);
+	            ellipsevertices.push(centerX + halfshortaxis,  centerY,                 bascisparameters.depth + 0.000001);
+	            ellipsevertices.push(centerX,                  centerY + halflongaxis,  bascisparameters.depth + 0.000001);
+
+	            ellipsevertices.push(centerX,                  centerY,                 bascisparameters.depth + 0.000001);
+	            ellipsevertices.push(centerX - halfshortaxis,  centerY,                 bascisparameters.depth + 0.000001);
+	            ellipsevertices.push(centerX,                  centerY + halflongaxis,  bascisparameters.depth + 0.000001);
+
+	            ellipsevertices.push(centerX,                  centerY,                 bascisparameters.depth + 0.000001);
+	            ellipsevertices.push(centerX + halfshortaxis,  centerY,                 bascisparameters.depth + 0.000001);
+	            ellipsevertices.push(centerX,                  centerY - halflongaxis,  bascisparameters.depth + 0.000001);
+
+	            ellipsevertices.push(centerX,                  centerY,                 bascisparameters.depth + 0.000001);
+	            ellipsevertices.push(centerX - halfshortaxis,  centerY,                 bascisparameters.depth + 0.000001);
+	            ellipsevertices.push(centerX,                  centerY - halflongaxis,  bascisparameters.depth + 0.000001);
+
+        		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
+        		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
+        		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
+
+        		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
+        		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
+        		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
+
+        		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
+        		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
+        		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
+
+        		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
+        		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
+        		ellipsecolors.push(1.0, 0.0, 0.0, 1.0);
+        	}
+        }
+
+
+        for(var j = 44; j < 45; j++)
+        {
+		    var low  = ( bascisparameters.marginY+ bascisparameters.recHeight)*j +  bascisparameters.marginY;
+
+        	for(var i = 0;i < bascisparameters.rowNum; i++)
+        	{
+	            var left  = ( bascisparameters.marginX + bascisparameters.recWidth)*i +  bascisparameters.marginX;
+
+	            linevertices.push(left,                  low + bascisparameters.recHeight,                 bascisparameters.depth+0.000001);
+	            linevertices.push(left + bascisparameters.recWidth,       low,     bascisparameters.depth+0.000001);
+
+        		linecolors.push(0.0, 0.0, 0.0, 1.0);
+        		linecolors.push(0.0, 0.0, 0.0, 1.0);
+
+        		lineindices.push(i*2, i*2 + 1);
+        	}
+        }
+
+        datas = {	
+        		rectanglevertexdata: rectanglevertices,
+        		rectanglecolordata: rectanglecolors,
+        		squarevertexdata: squarevertices,
+        		squarecolordata: squarecolors,
+        		trianglevertexdata: trianglevertices,
+        		trianglecolordata: trianglecolors,
+        		ellipsevertexdata: ellipsevertices,
+        		ellipsecolordata: ellipsecolors,
+        		linevertexdata: linevertices,
+        		linecolordata: linecolors,
+        		lineindexdata: lineindices
+        	};
+
+        return datas;
+	}    	
 	var makedata = function(marginX)
 	{
 		var datas;
@@ -540,6 +767,90 @@
     	});	
 	}
 
+	var decresort = function()
+	{
+		var datas = makedecreasedata();
+
+    	if(!showmutation && datas.squarevertexdata)
+		{
+			datas.squarevertexdata = undefined;
+			datas.squarecolordata = undefined;
+		}
+
+		var canvas = document.getElementById("glcanvas");
+
+		var canvaselement = $('#glcanvas');
+		var init = new initialize(canvas);
+		var gl = init.glValue();
+		var wf = new webglFunction(gl,canvaselement,bascisparameters);
+		wf.drawElements(datas);
+
+		$('#glcanvas').qtip({
+			content: {
+        				text: "tooltip"
+    				 },
+    		position: {
+		        corner: {
+					        target: 'topMiddle',
+					        tooltip: 'bottomMiddle'
+			            },
+			    adjust: {
+					        x: -1000,
+					        y: -1000
+			        	}
+	    	},
+	    	style: { classes: 'qtip-light qtip-rounded qtip-shadow qtip-lightwhite' }
+    	});
+	}
+
+	var incresort = function(value)
+	{
+		initialwebgl();
+	}
+
+
+	var zoom = function(value)
+	{
+		bascisparameters.marginX = originalmarginX * value;
+		bascisparameters.recWidth = value*originalrecWidth;
+		
+		var datas = makedata();
+
+		if(!showmutation && datas.squarevertexdata)
+		{
+			datas.squarevertexdata = undefined;
+			datas.squarecolordata = undefined;
+		}
+
+		var canvas = document.getElementById("glcanvas");
+
+		var cwidth = bascisparameters.rowNum * (bascisparameters.recWidth + bascisparameters.marginX) + bascisparameters.marginX;
+		canvas.width = cwidth;
+
+		var canvaselement = $('#glcanvas');
+		var init = new initialize(canvas);
+		var gl = init.glValue();
+		var wf = new webglFunction(gl,canvaselement,bascisparameters);
+		wf.drawElements(datas);
+
+		$('#glcanvas').qtip({
+			content: {
+        				text: "tooltip"
+    				 },
+    		position: {
+		        corner: {
+					        target: 'topMiddle',
+					        tooltip: 'bottomMiddle'
+			            },
+			    adjust: {
+					        x: -1000,
+					        y: -1000
+			        	}
+	    	},
+	    	style: { classes: 'qtip-light qtip-rounded qtip-shadow qtip-lightwhite' }
+    	});
+	}
+
 	var initialwebgl = function()
 	{
 		var datas = makedata();
@@ -590,7 +901,7 @@
     <div><button type="button" onClick="deltrack()">deltrack</button><div></br>
     <div><button type="button" onClick="incresort()">incresort</button><div></br>
     <div><button type="button" onClick="decresort()">decresort</button><div></br>
-    <div><input type="range" style="width:80px"  min="0.0" max="1.0" value="1.0" step="0.1" onchange="zoom( value)"/></div></br>
+    <div><input type="range" style="width:80px"  min="0.0" max="1.0" value="1.0" step="0.1" onchange="zoom(this.value)"/></div></br>
 </body>
 
 </html>

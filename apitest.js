@@ -1,40 +1,3 @@
-
-function initialize(canvas){
-
-	this.canvas = canvas;
-    this.glValue=function(){
-        var gl;
-        try 
-        {
-        	gl = null;
-            gl = this.canvas.getContext("experimental-webgl");
-            gl.viewportWidth = canvas.width;
-            gl.viewportHeight = canvas.height;
-        } catch (e) {
-        }
-        if (!gl) {
-            alert("Could not initialise Webthis.gl, sorry :-(");
-        }
-        return gl;
-    };
-}
-
-function makeData(dataStylePosition,parameterGroup)
-{
-	this.dataposition = dataStylePosition;
-	this.parameterGroup = parameterGroup;
-	this.dataValue = function()
-	{
-		for(i = 0 ; i < this.dataposition.length; i++)
-		{
-			for(j = 0 ; j < this.dataposition[i].length; j++)
-			{
-
-			}
-		}
-	};
-}
-
 function webglFunction(gl,canvaselement,bascisparameters){
 			var self = this;
 			this.contentvalue = "what is this?";
@@ -119,12 +82,12 @@ function webglFunction(gl,canvaselement,bascisparameters){
 			        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexpositionandcolorbuffers.ellipseVertexPositionBuffer);				        
 			        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(datas.ellipsevertexdata), this.gl.STATIC_DRAW);
 			        this.vertexpositionandcolorbuffers.ellipseVertexPositionBuffer.itemSize = 3;
-			        this.vertexpositionandcolorbuffers.ellipseVertexPositionBuffer.numItems = 6 * this.bascisparameters.rowNum * 2;
+			        this.vertexpositionandcolorbuffers.ellipseVertexPositionBuffer.numItems = datas.ellipsevertexdata.length/3;
 
 			        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexpositionandcolorbuffers.ellipseVertexColorBuffer);
 			        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(datas.ellipsecolordata), this.gl.STATIC_DRAW);
 			        this.vertexpositionandcolorbuffers.ellipseVertexColorBuffer.itemSize = 4;
-			        this.vertexpositionandcolorbuffers.ellipseVertexColorBuffer.numItems = 6 * this.bascisparameters.rowNum  * 2;
+			        this.vertexpositionandcolorbuffers.ellipseVertexColorBuffer.numItems = datas.ellipsecolordata.length/4;
 				}
 		    };
 
@@ -580,3 +543,5 @@ function webglFunction(gl,canvaselement,bascisparameters){
 			};
 
 	    };
+
+	    module.exports = webglFunction;
